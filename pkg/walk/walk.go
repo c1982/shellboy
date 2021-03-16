@@ -40,6 +40,8 @@ func (f *FileSystemWalker) walkFiles(done <-chan struct{}, root string) (<-chan 
 			if !info.Mode().IsRegular() {
 				return nil
 			}
+			//TODO: os.ModeSymlink check required
+
 			wg.Add(1)
 			go func() {
 				select {
