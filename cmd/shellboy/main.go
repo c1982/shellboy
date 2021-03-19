@@ -2,23 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"shellboy/pkg/walk"
+	"shellboy/pkg/fuzzyhash"
 )
 
 func main() {
-
-	fn := func(path string, f os.FileInfo) error {
-		if f.IsDir() {
-			return nil
-		}
-		fmt.Printf("file: %s\r\n", path)
-		return nil
-	}
-
-	scan := walk.NewWalker("/Users/oguzhan/basket")
-	err := scan.Scan(fn)
-	if err != nil {
-		fmt.Printf("error: %s", err)
-	}
+	fh := fuzzyhash.NewFuzzyHash()
+	h, _ := fh.ScoreFile("../../test_data/c99_v1.php", "../../test_data/c99_v2.php")
+	fmt.Println(h)
 }
