@@ -6,3 +6,5 @@
 *.out
 vendor/
 go.sum
+scripts/collection-*
+scripts/fuzzy.db
