@@ -36,12 +36,12 @@ func main() {
 	fhash := fuzzyhash.NewFuzzyHash(*minScore)
 	walker := walk.NewWalker(*rootPath, *minBytes, *maxBytes, excludeExtensions, includeExtensions)
 
-	fmt.Printf("scanning...")
+	fmt.Printf("ShellBoy WebShell Scanner (%s-%s)\r\n", Version, BuildDate)
+	fmt.Printf("Scanning... (%s)\r\n", *rootPath)
 	err := walker.Scan(checkFileHash(fhash, *verbose))
 	if err != nil {
 		fmt.Printf("error: %v\r\n", err)
 	}
-
 	fmt.Printf("done!\r\n")
 }
 

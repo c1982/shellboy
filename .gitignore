@@ -10,4 +10,4 @@ scripts/collection-*
 scripts/fuzzy.db
 scripts/fuzzy.db-e
 pkg/fuzzyhash/db
-cmd/shellboy/shellboy
+cmd/shellboy/shellboy*
