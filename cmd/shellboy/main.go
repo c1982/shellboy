@@ -18,6 +18,7 @@ func main() {
 	excludes := flag.String("excludes", "zip,exe,md,rar,gz", "Excluded file extensions. Empty is disabled")
 	includes := flag.String("includes", "", "Included file extensions. Default empty")
 	help := flag.Bool("h", false, "Display this help message")
+	verbose := flag.Bool("v", false, "Verbose mode")
 	flag.Parse()
 
 	if *help {
@@ -29,7 +30,7 @@ func main() {
 	includeExtensions := strings.Split(*includes, ",")
 	fhash := fuzzyhash.NewFuzzyHash(*minScore)
 	walker := walk.NewWalker(*rootPath, *minBytes, *maxBytes, excludeExtensions, includeExtensions)
-	err := walker.Scan(checkFileHash(fhash))
+	err := walker.Scan(checkFileHash(fhash, *verbose))
 	if err != nil {
 		fmt.Printf("error: %v\r\n", err)
 	}
@@ -37,11 +38,13 @@ func main() {
 	fmt.Printf("done!\r\n")
 }
 
-func checkFileHash(f *fuzzyhash.FuzzyHash) walk.ScanFunc {
+func checkFileHash(f *fuzzyhash.FuzzyHash, verbose bool) walk.ScanFunc {
 	return func(path string, fileInfo os.FileInfo) error {
 		score, name, err := f.FindHash(path)
 		if err != nil {
-			//fmt.Printf("error: %s, %s\r\n", err, path)
+			if verbose {
+				fmt.Printf("error: %s, %s\r\n", err, path)
+			}
 			return nil
 		}
 
