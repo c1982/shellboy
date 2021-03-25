@@ -9,3 +9,4 @@ go.sum
 scripts/collection-*
 scripts/fuzzy.db
 scripts/fuzzy.db-e
+pkg/fuzzyhash/db

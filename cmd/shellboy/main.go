@@ -41,7 +41,8 @@ func checkFileHash(f *fuzzyhash.FuzzyHash) walk.ScanFunc {
 	return func(path string, fileInfo os.FileInfo) error {
 		score, name, err := f.FindHash(path)
 		if err != nil {
-			return err
+			//fmt.Printf("error: %s, %s\r\n", err, path)
+			return nil
 		}
 
 		if score >= f.GetMinScore() {

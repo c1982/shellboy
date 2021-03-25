@@ -11,12 +11,16 @@ clean(){
 generatedb(){
     rm -rf ./fuzzy.db
     find ./collection-* -type f -size +1k -size -800k \
+    -not -path "./.git*" \
     -not -name "*.md" \
     -not -name "*.rar" \
     -not -name "*.zip" \
     -not -name "*.gz" \
+    -not -name "*.7z" \
+    -not -name "*.png" \
+    -not -name "*.sample" \
+    -not -name "LICENSE" \
     -exec ssdeep -sb {} > fuzzy.db \;
-
     sed -i -e '/ssdeep,1.1--blocksize:hash:hash,filename/d' fuzzy.db
     rm -rf ./fuzzy.db-e
 }
