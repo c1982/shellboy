@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+var (
+	Version   = "0.0.0"
+	BuildDate = ""
+)
+
 func main() {
 	currentPath, _ := os.Getwd()
 	rootPath := flag.String("directory", currentPath, "Root directory for scan.")
