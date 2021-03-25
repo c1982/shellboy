@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 )
 
@@ -18,14 +19,22 @@ type scanResult struct {
 
 //FileSystemWalker for optional parameters field
 type FileSystemWalker struct {
-	RootPath              string
-	MaxFileSize           int
-	ExcludeFileExtentions []string
+	rootPath              string
+	minFileSize           int64
+	maxFileSize           int64
+	excludeFileExtensions []string
+	includeFileExtensions []string
 }
 
 //NewWalker create a new file walker
-func NewWalker(rootpath string) (fs *FileSystemWalker) {
-	return &FileSystemWalker{RootPath: rootpath}
+func NewWalker(rootpath string, minfilesize, maxfilesize int, excludes, includes []string) (fs *FileSystemWalker) {
+	return &FileSystemWalker{
+		rootPath:              rootpath,
+		minFileSize:           int64(minfilesize),
+		maxFileSize:           int64(maxfilesize),
+		excludeFileExtensions: excludes,
+		includeFileExtensions: includes,
+	}
 }
 
 func (f *FileSystemWalker) walkFiles(done <-chan struct{}, root string) (<-chan scanResult, <-chan error) {
@@ -41,6 +50,22 @@ func (f *FileSystemWalker) walkFiles(done <-chan struct{}, root string) (<-chan 
 				return nil
 			}
 			//TODO: os.ModeSymlink check required
+
+			if info.Size() < f.minFileSize {
+				return nil
+			}
+
+			if info.Size() > f.maxFileSize {
+				return nil
+			}
+
+			if f.isExcluded(path) {
+				return nil
+			}
+
+			if !f.isIncluded(path) {
+				return nil
+			}
 
 			wg.Add(1)
 			go func() {
@@ -74,7 +99,7 @@ func (f *FileSystemWalker) Scan(scanfn ScanFunc) error {
 	done := make(chan struct{})
 	defer close(done)
 
-	c, errc := f.walkFiles(done, f.RootPath)
+	c, errc := f.walkFiles(done, f.rootPath)
 	for r := range c {
 		if r.err != nil {
 			return r.err
@@ -87,4 +112,21 @@ func (f *FileSystemWalker) Scan(scanfn ScanFunc) error {
 	}
 
 	return <-errc
+}
+
+func (f *FileSystemWalker) containArray(filename string, slice []string) bool {
+	for i := 0; i < len(slice); i++ {
+		if ok := strings.HasSuffix(filename, slice[i]); ok {
+			return ok
+		}
+	}
+	return false
+}
+
+func (f *FileSystemWalker) isExcluded(filename string) bool {
+	return f.containArray(filename, f.excludeFileExtensions)
+}
+
+func (f *FileSystemWalker) isIncluded(filename string) bool {
+	return f.containArray(filename, f.includeFileExtensions)
 }

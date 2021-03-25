@@ -1,7 +1,6 @@
 package yara
 
 import (
-	"bytes"
 	_ "embed"
 	"io/ioutil"
 
@@ -45,13 +44,6 @@ func (y *YaraEngine) Check(filepath string) (malwareok bool, name string, err er
 }
 
 func (y *YaraEngine) match(dat []byte) (matched bool, name string) {
-	for _, v := range y.data.Rules {
-		for i := 0; i < len(v.Strings); i++ {
-			pattern := v.Strings[i].AsProto().GetValue()
-			if r := bytes.Index(dat, []byte(pattern)); r != -1 {
-				return true, v.Identifier
-			}
-		}
-	}
+	//TODO: implement match
 	return false, name
 }

@@ -37,7 +37,7 @@ func TestParseString(t *testing.T) {
 		t.Error(err)
 	}
 
-	malwareok, name, err := y.Check("./test_data/kacak.txt")
+	malwareok, name, err := y.Check("./testdata/kacak.txt")
 	if err != nil {
 		t.Error(err)
 	}
