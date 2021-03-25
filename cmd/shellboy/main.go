@@ -35,6 +35,8 @@ func main() {
 	includeExtensions := strings.Split(*includes, ",")
 	fhash := fuzzyhash.NewFuzzyHash(*minScore)
 	walker := walk.NewWalker(*rootPath, *minBytes, *maxBytes, excludeExtensions, includeExtensions)
+
+	fmt.Printf("scanning...")
 	err := walker.Scan(checkFileHash(fhash, *verbose))
 	if err != nil {
 		fmt.Printf("error: %v\r\n", err)

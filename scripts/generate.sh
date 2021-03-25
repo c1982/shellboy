@@ -20,6 +20,7 @@ generatedb(){
     -not -name "*.png" \
     -not -name "*.sample" \
     -not -name "LICENSE" \
+    -not -name "license" \
     -exec ssdeep -sb {} > fuzzy.db \;
     sed -i -e '/ssdeep,1.1--blocksize:hash:hash,filename/d' fuzzy.db
     rm -rf ./fuzzy.db-e
