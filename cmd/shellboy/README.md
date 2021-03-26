@@ -1,3 +1,0 @@
-# shellboy
-
-w00t!
