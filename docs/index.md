@@ -1,12 +1,11 @@
 Hello there,
 ShellBoy is a useful web shell finder. It simply knows the signatures of active or inactive webshells on the market and looks for these signatures in files on your server. 
 
-
 ## Latest Release
 
-Please follow github release pages
+Please follow github release pages for binaries
 
-* https://github.com/c1982/shellboy/releases/tag/v0.0.1-beta
+* [github.com/c1982/shellboy/releases/latest](https://github.com/c1982/shellboy/releases/latest)
 
 ## Usage
 
@@ -40,5 +39,3 @@ Exclude images files sanning
 Change minimum similarity score. This value increases skepticism 
 
 >shellboy --directory=/usr/local/vhosts --score=75
-
-
